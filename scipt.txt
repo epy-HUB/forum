@@ -1,0 +1,4 @@
+$threads = factory('App\Thread', 10)->create(); 
+
+factory('App\Reply', 20)->create(['thread_id' => App\Thread::latest()->fir
+st()->id]);
