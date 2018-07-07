@@ -15,6 +15,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/_all-skins.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/AdminLTE.css') }}" rel="stylesheet">
     <script>
         window.App = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -196,6 +198,7 @@ desired effect
 
 <!-- REQUIRED JS SCRIPTS -->
 <script src="{{ asset('js/app.js') }}"></script>
-
+<script src="{{ asset('js/adminlte.js') }}"></script>
 </body>
 </html>
+adminlte.js

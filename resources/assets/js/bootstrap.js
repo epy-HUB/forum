@@ -58,7 +58,7 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
-require('admin-lte');
+// require('admin-lte');
 
 window.events = new Vue();
 

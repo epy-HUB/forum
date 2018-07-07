@@ -30,7 +30,7 @@
 <script>
     export default{
         props: ['channels'],
-        data: function(){
+        data(){
             return {
                 edit: false,
                 list: this.channels,
@@ -42,31 +42,31 @@
             };
         },
 
-        mounted: function(){
+        mounted(){
             console.log('channel component loaded');
             this.fetchChannelList();
         },
 
         methods: {
-            fetchChannelList: function(){
+            fetchChannelList(){
                 console.log('fetching  contacts');
                 let self = this;
                 axios.get('channels')
-                    .then(function(response){
+                    .then((response)=>{
                         console.log(response.data);
                         self.list = response.data;
                     })
-                    .catch(function(error){
+                    .catch((error)=>{
                         console.log(error);
                     });
             },
 
-            createChannel: function(){
+            createChannel(){
                 console.log('create channel');
                 let self = this;
                 let params = Object.assign({}, self.channel);
                 axios.post('channels/store', params)
-                    .then(function(){
+                    .then(()=>{
                         self.channel.name = '';
                         self.channel.desc = '';
                         self.edit = false;
@@ -74,17 +74,17 @@
                         self.fetchChannelList();
                         flash('Added a new channel');
                     })
-                    .catch(function(error){
+                    .catch((error)=>{
                         console.log(error);
                         // flash(error.response.data, 'danger');
                     });
               
             },
 
-            showChannel: function(id){
+            showChannel(id){
                 let self = this;
                 axios.get('channels/'+ id)
-                    .then(function(response){
+                    .then((response)=>{
                         self.channel.id = response.data.id;
                         self.channel.name = response.data.name;
                         self.channel.desc = response.data.desc;
@@ -94,12 +94,12 @@
                     self.edit = true;
             },
 
-            updateChannel: function(id){
+            updateChannel(id){
                 console.log('update '+ id +'channel');
                 let self = this;
                 let params = Object.assign({}, self.channel);
                 axios.patch('channels/'+id, params)
-                    .then(function(){
+                    .then(()=>{
                         self.channel.name = '';
                         self.channel.desc = '';
                         self.edit = false;
@@ -107,19 +107,19 @@
                         self.fetchChannelList();
                         
                     })
-                    .catch(function(error){
+                    .catch((error)=>{
                         console.log(error);
                         flash(error.response.data, 'danger');
                     });
             },
 
-            deleteChannel: function(id){
+            deleteChannel(id){
                 let self = this;
                 axios.delete('channels/'+ id)
-                    .then(function(response){
+                    .then((response)=>{
                         self.fetchChannelList();
                     })
-                    .catch(function(error){
+                    .catch((error)=>{
                         console.log(error);
                     });
             }

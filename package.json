@@ -19,7 +19,6 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
-    "admin-lte": "2.4.2",
     "moment": "^2.22.2"
   }
 }
