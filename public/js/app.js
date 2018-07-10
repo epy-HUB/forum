@@ -28454,7 +28454,7 @@ Vue.component('paginator', __webpack_require__(191));
 Vue.component('user-notifications', __webpack_require__(194));
 Vue.component('avatar-form', __webpack_require__(197));
 Vue.component('channel', __webpack_require__(203));
-// Vue.component('thread-view', require('./pages/Thread.vue'));
+
 var app = new Vue({
   el: '#app'
 });
@@ -60435,6 +60435,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -60448,17 +60450,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editing: false,
             id: this.data.id,
             body: this.data.body,
+            isBest: this.data.isBest,
             reply: this.data
         };
+    },
+    created: function created() {
+        var _this = this;
+
+        window.events.$on('best-reply-selected', function (id) {
+            _this.isBest = id === _this.id;
+        });
     },
 
 
     computed: {
         ago: function ago() {
             return __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.data.created_at).fromNow() + "...";
-        },
-        signedIn: function signedIn() {
-            return window.App.signedIn;
         }
     },
 
@@ -60482,6 +60489,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // $(this.$el).fadeOut(300, function(){
             //     flash('Your reply has been deleted');
             // });
+        },
+        markBestReply: function markBestReply() {
+            // this.isBest = true; 
+            axios.post('/replies/' + this.reply.id + '/best');
+            window.events.$emit('best-reply-selected', this.data.id);
         }
     }
 });
@@ -60900,7 +60912,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "panel panel-default", attrs: { id: "reply-" + _vm.id } },
+    {
+      staticClass: "panel",
+      class: _vm.isBest ? "panel-success" : "panel-default",
+      attrs: { id: "reply-" + _vm.id }
+    },
     [
       _c("div", { staticClass: "panel-heading" }, [
         _c("div", { staticClass: "level" }, [
@@ -60980,9 +60996,9 @@ var render = function() {
           : _c("div", { domProps: { textContent: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
-      _vm.authorize("owns", _vm.reply)
-        ? _c("div", [
-            _c("div", { staticClass: "panel-footer level" }, [
+      _c("div", { staticClass: "panel-footer level" }, [
+        _vm.authorize("owns", _vm.reply)
+          ? _c("div", [
               _c(
                 "button",
                 {
@@ -61005,8 +61021,25 @@ var render = function() {
                 [_vm._v("Delete")]
               )
             ])
-          ])
-        : _vm._e()
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.isBest,
+                expression: "!isBest"
+              }
+            ],
+            staticClass: "btn btn-xs btn-success  ml-a",
+            on: { click: _vm.markBestReply }
+          },
+          [_vm._v("Best Reply")]
+        )
+      ])
     ]
   )
 }
@@ -61107,11 +61140,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
-    computed: {
-        signedIn: function signedIn() {
-            return window.App.signedIn;
-        }
-    },
+    // computed: {
+    //     signedIn(){
+    //        return window.App.signedIn; 
+    //     }
+    // },
 
     methods: {
         addReply: function addReply() {
@@ -62122,6 +62155,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['channels'],
@@ -62214,7 +62263,9 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v("Add Channel")]),
+    !_vm.edit
+      ? _c("h1", [_vm._v("Add Channel")])
+      : _c("h1", [_vm._v("Update Channel")]),
     _vm._v(" "),
     _c(
       "form",
@@ -62320,43 +62371,60 @@ var render = function() {
     _vm._v(" "),
     _c("h1", [_vm._v("Channels")]),
     _vm._v(" "),
-    _c(
-      "ul",
-      { staticClass: "list-group" },
-      _vm._l(_vm.list, function(channel) {
-        return _c("li", { staticClass: "list-group-item" }, [
-          _vm._v("\n            " + _vm._s(channel.name) + "\n            "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-default btn-xs",
-              on: {
-                click: function($event) {
-                  _vm.showChannel(channel.id)
-                }
-              }
-            },
-            [_vm._v("Edit")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-danger btn-xs",
-              on: {
-                click: function($event) {
-                  _vm.deleteChannel(channel.id)
-                }
-              }
-            },
-            [_vm._v("Delete")]
-          )
-        ])
-      })
-    )
+    _c("table", { staticClass: "table table-bordered table-stroped" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.list, function(channel) {
+          return _c("tr", [
+            _c("td", [_vm._v(_vm._s(channel.name))]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-info btn-xs",
+                  on: {
+                    click: function($event) {
+                      _vm.showChannel(channel.id)
+                    }
+                  }
+                },
+                [_vm._v("Edit")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger btn-xs",
+                  on: {
+                    click: function($event) {
+                      _vm.deleteChannel(channel.id)
+                    }
+                  }
+                },
+                [_vm._v("Delete")]
+              )
+            ])
+          ])
+        })
+      )
+    ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", [_vm._v("Name")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Action")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

@@ -1,4 +1,4 @@
-@extends(config('laravelusers.laravelUsersBladeExtended'))
+@extends('layouts.master')
 
 @section('template_title')
   @lang('laravelusers::laravelusers.showing-all-users')

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <h1>Add Channel</h1>
+        <h1 v-if="!edit">Add Channel</h1>
+        <h1 v-else>Update Channel</h1>
         <form action="#" @submit.prevent="edit ? updateChannel(channel.id) : createChannel()">
             <div class="form-group">
                 <label for="name">Name</label>
@@ -17,13 +18,28 @@
         </form>
 
         <h1>Channels</h1>
-        <ul class="list-group">
+        <table class="table table-bordered table-stroped">
+            <thead>
+                    <th>Name</th>
+                    <th>Action</th>
+                    <!-- <th>Delete</th> -->
+            </thead>
+            <tbody>
+                <tr v-for="channel in list" >
+                    <td>{{ channel.name }}</td>
+                    <td> <button @click="showChannel(channel.id)" class="btn btn-info btn-xs">Edit</button>
+                    <button @click="deleteChannel(channel.id)" class="btn btn-danger btn-xs">Delete</button></td>
+                </tr>
+            </tbody>
+            
+        </table>
+        <!-- <ul class="list-group">
             <li v-for="channel in list" class="list-group-item">
                 {{ channel.name }}
                 <button @click="showChannel(channel.id)" class="btn btn-default btn-xs">Edit</button>
                 <button @click="deleteChannel(channel.id)" class="btn btn-danger btn-xs">Delete</button>
             </li>
-        </ul>
+        </ul> -->
     </div>
 </template>
 

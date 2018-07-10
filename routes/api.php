@@ -14,34 +14,34 @@ use App\Channel;
 |
 */
 
-Route::group(['middleware' => 'api'], function(){
-    Route::get('channel', function(){
-        return Channel::latest()->orderBy('created_at', 'desc')->get();
-    });
+// Route::group(['middleware' => 'api'], function(){
+//     Route::get('channel', function(){
+//         return Channel::latest()->orderBy('created_at', 'desc')->get();
+//     });
 
-    Route::get('channel/{id}', function($id){
-       return Channel::findOrFail($id);
-    });
+//     Route::get('channel/{id}', function($id){
+//        return Channel::findOrFail($id);
+//     });
 
-    Route::post('channel/store', function(Request $request){
-        return Channel::create([
-            'name' => $request->input(['name']),
-            'slug' => $request->input(['slug'])
-        ]);
-     });
+//     Route::post('channel/store', function(Request $request){
+//         return Channel::create([
+//             'name' => $request->input(['name']),
+//             'slug' => $request->input(['slug'])
+//         ]);
+//      });
 
-    Route::patch('channel/{id}', function(Request $request, $id){
-        Channel::findOrFail($id)->update([
-            'name' => $request->input(['name']),
-            'slug' => $request->input(['slug'])
-        ]);
-     });
+//     Route::patch('channel/{id}', function(Request $request, $id){
+//         Channel::findOrFail($id)->update([
+//             'name' => $request->input(['name']),
+//             'slug' => $request->input(['slug'])
+//         ]);
+//      });
 
-    Route::delete('channel/{id}', function($id){
-        return Channel::destroy($id);
-     });
-});
+//     Route::delete('channel/{id}', function($id){
+//         return Channel::destroy($id);
+//      });
+// });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });

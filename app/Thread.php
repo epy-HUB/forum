@@ -156,4 +156,11 @@ class Thread extends Model
         
         return "{$slug}-2";
     }
+
+    public function markBestReply(Reply $reply){
+        // $this->best_reply_id = $reply->id;
+        // $this.save();
+        // $this->authorize('update', $reply->thread);
+        $reply->thread->update(['best_reply_id' => $reply->id]);
+    }
 }

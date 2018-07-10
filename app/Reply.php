@@ -13,7 +13,7 @@ class Reply extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['favoritesCount', 'isFavorited'];
+    protected $appends = ['favoritesCount', 'isFavorited', 'isBest'];
 
     protected $with =['owner', 'favorites'];
 
@@ -46,6 +46,14 @@ class Reply extends Model
     public function mentionedUsers(){
         preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
         return $matches[1];
+    }
+
+    public function isBest(){
+        return $this->thread->best_reply_id == $this->id;
+    }
+
+    public function getIsBestAttribute(){
+        return $this->isBest();
     }
 
 

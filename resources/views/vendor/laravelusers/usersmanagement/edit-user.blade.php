@@ -1,4 +1,4 @@
-@extends(config('laravelusers.laravelUsersBladeExtended'))
+@extends('layouts.master')
 
 @section('template_title')
   @lang('laravelusers::laravelusers.editing-user', ['name' => $user->name])

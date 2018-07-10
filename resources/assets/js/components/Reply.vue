@@ -1,6 +1,6 @@
 <template>
    
-    <div :id="'reply-' + id" class="panel panel-default">
+    <div :id="'reply-' + id" class="panel" :class="isBest ? 'panel-success' : 'panel-default'">
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
@@ -29,11 +29,13 @@
                 
             </div>
 
-            <div v-if="authorize('owns', reply)">
-                <div class="panel-footer level" >
+            
+            <div class="panel-footer level" >
+                <div v-if="authorize('owns', reply)">
                     <button class="btn btn-xs  mr-1" @click="editing = true" >Edit</button>
                     <button class="btn btn-xs btn-danger  mr-1" @click="destroy" >Delete</button>
                 </div>
+                <button class="btn btn-xs btn-success  ml-a" @click="markBestReply" v-show="!isBest" >Best Reply</button>
             </div>
       
     </div>
@@ -54,8 +56,15 @@
                 editing: false,
                 id: this.data.id,
                 body: this.data.body,
+                isBest: this.data.isBest,
                 reply: this.data
             };
+        },
+
+        created(){
+            window.events.$on('best-reply-selected', (id) => {
+                this.isBest = (id === this.id);
+            });
         },
 
         computed: {
@@ -64,9 +73,9 @@
                return moment(this.data.created_at).fromNow() + "..."; 
             },
 
-            signedIn(){
-                return window.App.signedIn;
-            },
+            // signedIn(){
+            //     return window.App.signedIn;
+            // },
 
             
         },
@@ -98,6 +107,12 @@
                 //     flash('Your reply has been deleted');
                 // });
                 
+            },
+
+            markBestReply(){
+                // this.isBest = true; 
+                axios.post('/replies/'+ this.reply.id +'/best');
+                window.events.$emit('best-reply-selected', this.data.id);
             }
         }
     }
